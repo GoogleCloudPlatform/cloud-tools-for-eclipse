@@ -66,9 +66,9 @@ public class StandardStagingDelegate implements StagingDelegate {
 
       IPath explodedWar = safeWorkDirectory.append("exploded-war");
       IPath tempDirectory = safeWorkDirectory.append("temp");
-      WarPublisher.publishExploded(project, explodedWar, tempDirectory, subMonitor.newChild(40));
+      WarPublisher.publishExploded(project, explodedWar, tempDirectory, subMonitor.split(40));
       CloudSdkStagingHelper.stageStandard(explodedWar, stagingDirectory,
-          cloudSdkWrapper.getCloudSdk(), subMonitor.newChild(60));
+          cloudSdkWrapper.getCloudSdk(), subMonitor.split(60));
 
       optionalConfigurationFilesDirectory =
           stagingDirectory.append(CloudSdkStagingHelper.STANDARD_STAGING_GENERATED_FILES_DIRECTORY);

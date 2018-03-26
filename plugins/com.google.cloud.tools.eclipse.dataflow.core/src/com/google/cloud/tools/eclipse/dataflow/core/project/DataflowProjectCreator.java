@@ -198,7 +198,7 @@ public class DataflowProjectCreator implements IRunnableWithProgress {
         projects = projectConfigurationManager.createArchetypeProjects(location, archetype,
             // TODO: Get the version string from the user as well.
             mavenGroupId, mavenArtifactId, "0.0.1-SNAPSHOT", packageString, archetypeProperties,
-            projectImportConfiguration, progress.newChild(4));
+            projectImportConfiguration, progress.split(4));
         break;
       } catch (CoreException ex) {
         IStatus child = StatusUtil.error(this, ex.getMessage(), ex);
@@ -212,11 +212,11 @@ public class DataflowProjectCreator implements IRunnableWithProgress {
         DataflowCorePlugin.logError(failure, "CoreException while creating new Dataflow Project");
       }
     } else {
-      SubMonitor natureMonitor = SubMonitor.convert(progress.newChild(1), projects.size());
+      SubMonitor natureMonitor = SubMonitor.convert(progress.split(1), projects.size());
       for (IProject project : projects) {
         try {
           DataflowJavaProjectNature.addDataflowJavaNatureToProject(
-              project, natureMonitor.newChild(1));
+              project, natureMonitor.split(1));
           setPreferences(project);
         } catch (CoreException e) {
           DataflowCorePlugin.logError(e,

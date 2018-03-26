@@ -75,12 +75,12 @@ public class GpeMigrator {
     IProject project = facetedProject.getProject();
     boolean wasGpeProject = false;
 
-    wasGpeProject |= removeGpeClasspathEntries(project, subMonitor.newChild(10));
+    wasGpeProject |= removeGpeClasspathEntries(project, subMonitor.split(10));
     if (subMonitor.isCanceled()) {
       return wasGpeProject;
     }
 
-    wasGpeProject |= removeGpeNature(project, subMonitor.newChild(10));
+    wasGpeProject |= removeGpeNature(project, subMonitor.split(10));
     if (subMonitor.isCanceled()) {
       return wasGpeProject;
     }

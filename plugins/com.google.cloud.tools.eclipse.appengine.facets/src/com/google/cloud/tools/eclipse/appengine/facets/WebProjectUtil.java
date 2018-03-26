@@ -82,8 +82,8 @@ public class WebProjectUtil {
     IFile file = webInfDir.getFile(filePath);
     if (!file.exists()) {
       SubMonitor progress = SubMonitor.convert(monitor, 2);
-      ResourceUtils.createFolders(file.getParent(), progress.newChild(1));
-      file.create(contents, true, progress.newChild(1));
+      ResourceUtils.createFolders(file.getParent(), progress.split(1));
+      file.create(contents, true, progress.split(1));
     }
     return file;
   }

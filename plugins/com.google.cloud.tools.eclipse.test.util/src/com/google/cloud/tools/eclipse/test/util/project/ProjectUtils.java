@@ -109,7 +109,7 @@ public class ProjectUtils {
     IWorkspaceRoot root = getWorkspace().getRoot();
     // extract projects into our workspace using WTP internal utility class
     // assumes projects are contained in subdirectories within the zip
-    IStatus status = ZipUtil.unzip(zippedFile, root.getLocation().toFile(), progress.newChild(10));
+    IStatus status = ZipUtil.unzip(zippedFile, root.getLocation().toFile(), progress.split(10));
     assertTrue("failed to extract: " + status, status.isOK());
 
     List<IPath> projectFiles = new ArrayList<>();
@@ -133,8 +133,8 @@ public class ProjectUtils {
       IProjectDescription descriptor = root.getWorkspace().loadProjectDescription(projectFile);
       IProject project = root.getProject(descriptor.getName());
       // bring in the project to the workspace
-      project.create(descriptor, progress.newChild(2));
-      project.open(progress.newChild(8));
+      project.create(descriptor, progress.split(2));
+      project.open(progress.split(8));
       projects.add(project);
     }
 

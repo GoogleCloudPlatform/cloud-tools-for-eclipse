@@ -121,13 +121,13 @@ public class BuildPath {
         Messages.getString("adding.app.engine.libraries"), //$NON-NLS-1$
         25);
     
-    Library masterLibrary = collectLibraryFiles(javaProject, libraries, subMonitor.newChild(8));
-    IClasspathEntry masterEntry = computeEntry(javaProject, masterLibrary, subMonitor.newChild(8));
-    saveLibraryList(javaProject, libraries, subMonitor.newChild(1));
+    Library masterLibrary = collectLibraryFiles(javaProject, libraries, subMonitor.split(8));
+    IClasspathEntry masterEntry = computeEntry(javaProject, masterLibrary, subMonitor.split(8));
+    saveLibraryList(javaProject, libraries, subMonitor.split(1));
 
     if (masterEntry != null) {
       ClasspathUtil.addClasspathEntry(javaProject.getProject(), masterEntry,
-          subMonitor.newChild(8));
+          subMonitor.split(8));
     }
     runContainerResolverJob(javaProject);
   }

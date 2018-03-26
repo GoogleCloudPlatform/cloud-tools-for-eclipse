@@ -446,7 +446,7 @@ public class PipelineArgumentsTab extends AbstractLaunchConfigurationTab {
               throws InvocationTargetException, InterruptedException {
             SubMonitor subMonitor = SubMonitor.convert(monitor,
                 Messages.getString("loading.pipeline.options.hierarchy"), 100);
-            hierarchy = getPipelineOptionsHierarchy(subMonitor.newChild(100));
+            hierarchy = getPipelineOptionsHierarchy(subMonitor.split(100));
           }
         });
   }

@@ -117,7 +117,7 @@ public class DataflowPipelineLaunchDelegate implements ILaunchConfigurationDeleg
 
     PipelineOptionsHierarchy hierarchy;
     try {
-      hierarchy = optionsRetrieverFactory.forProject(project, majorVersion, progress.newChild(1));
+      hierarchy = optionsRetrieverFactory.forProject(project, majorVersion, progress.split(1));
     } catch (PipelineOptionsRetrievalException e) {
       throw new CoreException(new Status(Status.ERROR, DataflowCorePlugin.PLUGIN_ID,
           "Could not retrieve Pipeline Options Hierarchy for project " + project.getName(), e));
@@ -149,7 +149,7 @@ public class DataflowPipelineLaunchDelegate implements ILaunchConfigurationDeleg
     AnalyticsPingManager.getInstance().sendPing(AnalyticsEvents.DATAFLOW_RUN,
         AnalyticsEvents.DATAFLOW_RUN_RUNNER, pipelineRunner.getRunnerName());
 
-    delegate.launch(workingCopy, mode, launch, progress.newChild(1));
+    delegate.launch(workingCopy, mode, launch, progress.split(1));
   }
 
   private IProject getProject(ILaunchConfiguration configuration) throws CoreException {

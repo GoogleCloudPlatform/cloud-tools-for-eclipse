@@ -158,10 +158,10 @@ public class LocalAppEngineServerLaunchConfigurationDelegate
   public boolean finalLaunchCheck(ILaunchConfiguration configuration, String mode,
       IProgressMonitor monitor) throws CoreException {
     SubMonitor progress = SubMonitor.convert(monitor, 50);
-    if (!super.finalLaunchCheck(configuration, mode, progress.newChild(10))) {
+    if (!super.finalLaunchCheck(configuration, mode, progress.split(10))) {
       return false;
     }
-    IStatus status = validateCloudSdk(progress.newChild(20));
+    IStatus status = validateCloudSdk(progress.split(20));
     if (!status.isOK()) {
       // Throwing a CoreException will result in the ILaunch hanging around in
       // an invalid state
@@ -179,7 +179,7 @@ public class LocalAppEngineServerLaunchConfigurationDelegate
       // <code>JobManager.find(FAMILY_AUTO_BUILD).length > 0</code> produces too many
       // false positives.
       try {
-        Job.getJobManager().join(ResourcesPlugin.FAMILY_AUTO_BUILD, progress.newChild(20));
+        Job.getJobManager().join(ResourcesPlugin.FAMILY_AUTO_BUILD, progress.split(20));
       } catch (InterruptedException ex) {
         /* ignore */
       }

@@ -221,7 +221,7 @@ public class AppEngineStandardFacet {
       String projectName = facetedProject.getProject().getName();
       logger.fine(projectName + ": current facets: " + facetedProject.getProjectFacets());
       IFacetedProjectWorkingCopy workingCopy = facetedProject.createWorkingCopy();
-      workingCopy.detect(subMonitor.newChild(20));
+      workingCopy.detect(subMonitor.split(20));
 
       logger.fine(projectName + ": detector changes: " + workingCopy.getProjectFacetActions());
 
@@ -229,7 +229,7 @@ public class AppEngineStandardFacet {
       // If successful, workingCopy will mirror the IFacetedProject.
       // The only known potential for conflict was downgrading DWP from 3.x -> 2.5 for
       // AES JRE7 which we've side-stepped by allowing this version change.
-      workingCopy.commitChanges(subMonitor.newChild(20));
+      workingCopy.commitChanges(subMonitor.split(20));
 
       if (facetedProject.hasProjectFacet(FACET)) {
         // success!
@@ -309,7 +309,7 @@ public class AppEngineStandardFacet {
         }
       }
 
-      facetUtil.install(subMonitor.newChild(90));
+      facetUtil.install(subMonitor.split(90));
     } finally {
       lock.release();
     }
@@ -351,7 +351,7 @@ public class AppEngineStandardFacet {
         IDependencyGraph.INSTANCE.preUpdate();
         try {
           Job.getJobManager().join(DependencyGraphImpl.GRAPH_UPDATE_JOB_FAMILY,
-              progress.newChild(10));
+              progress.split(10));
         } catch (OperationCanceledException | InterruptedException ex) {
           logger.log(Level.WARNING, "Exception waiting for WTP Graph Update job", ex);
         }
@@ -365,28 +365,28 @@ public class AppEngineStandardFacet {
                 org.eclipse.jst.server.core.FacetUtil.getRuntime(appEngineRuntime);
             if (project instanceof IFacetedProject) {
               ((IFacetedProject) project).addTargetedRuntime(appEngineFacetRuntime,
-                  progress.newChild(1));
+                  progress.split(1));
             } else {
               ((IFacetedProjectWorkingCopy) project).addTargetedRuntime(appEngineFacetRuntime);
             }
           }
           if (project instanceof IFacetedProject) {
             ((IFacetedProject) project).setPrimaryRuntime(appEngineFacetRuntime,
-                progress.newChild(1));
+                progress.split(1));
           } else {
             ((IFacetedProjectWorkingCopy) project).setPrimaryRuntime(appEngineFacetRuntime);
           }
         } else { // Create a new App Engine runtime
-          IRuntime appEngineFacetRuntime = createAppEngineFacetRuntime(progress.newChild(10));
+          IRuntime appEngineFacetRuntime = createAppEngineFacetRuntime(progress.split(10));
           if (appEngineFacetRuntime == null) {
             throw new NullPointerException("Could not locate App Engine facet runtime");
           }
 
           if (project instanceof IFacetedProject) {
             ((IFacetedProject) project).addTargetedRuntime(appEngineFacetRuntime,
-                progress.newChild(10));
+                progress.split(10));
             ((IFacetedProject) project).setPrimaryRuntime(appEngineFacetRuntime,
-                progress.newChild(10));
+                progress.split(10));
           } else {
             ((IFacetedProjectWorkingCopy) project).addTargetedRuntime(appEngineFacetRuntime);
             ((IFacetedProjectWorkingCopy) project).setPrimaryRuntime(appEngineFacetRuntime);

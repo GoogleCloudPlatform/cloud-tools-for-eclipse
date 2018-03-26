@@ -57,9 +57,9 @@ abstract class FlexStagingDelegate implements StagingDelegate {
     }
 
     try {
-      IPath deployArtifact = getDeployArtifact(safeWorkDirectory, subMonitor.newChild(40));
+      IPath deployArtifact = getDeployArtifact(safeWorkDirectory, subMonitor.split(40));
       CloudSdkStagingHelper.stageFlexible(appEngineDirectory, deployArtifact, stagingDirectory,
-          subMonitor.newChild(60));
+          subMonitor.split(60));
       return Status.OK_STATUS;
     } catch (AppEngineException | CoreException ex) {
       return StatusUtil.error(this, Messages.getString("deploy.job.staging.failed"), ex);

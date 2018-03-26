@@ -47,7 +47,7 @@ public class CreateAppEngineStandardWtpProject extends CreateAppEngineWtpProject
         Messages.getString("add.appengine.standard.facet"), 100); 
  
     AppEngineStandardFacet.installAppEngineFacet(
-        newProject, true /* installDependentFacets */, subMonitor.newChild(100));
+        newProject, true /* installDependentFacets */, subMonitor.split(100));
   }
 
   @Override

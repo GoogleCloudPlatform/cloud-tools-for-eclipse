@@ -88,7 +88,7 @@ public class DeployJob extends WorkspaceJob {
     try {
       progress.subTask("Checking for Google Cloud SDK");
       IStatus installStatus =
-          CloudSdkManager.getInstance().installManagedSdk(stdoutOutputStream, progress.newChild(20));
+          CloudSdkManager.getInstance().installManagedSdk(stdoutOutputStream, progress.split(20));
       if (installStatus != Status.OK_STATUS) {
         return StatusUtil.error(
             this,
@@ -106,7 +106,7 @@ public class DeployJob extends WorkspaceJob {
 
       progress.subTask("Staging project files");
       IPath stagingDirectory = workDirectory.append(STAGING_DIRECTORY_NAME);
-      IStatus stagingStatus = stageProject(stagingDirectory, progress.newChild(30));
+      IStatus stagingStatus = stageProject(stagingDirectory, progress.split(30));
       if (stagingStatus != Status.OK_STATUS) {
         return stagingStatus;
       } else if (monitor.isCanceled()) {
@@ -114,7 +114,7 @@ public class DeployJob extends WorkspaceJob {
       }
 
       progress.subTask("Deploying staged project");
-      IStatus deployStatus = deployProject(credentialFile, stagingDirectory, progress.newChild(70));
+      IStatus deployStatus = deployProject(credentialFile, stagingDirectory, progress.split(70));
       if (deployStatus != Status.OK_STATUS) {
         return deployStatus;
       } else if (monitor.isCanceled()) {
@@ -147,10 +147,10 @@ public class DeployJob extends WorkspaceJob {
     SubMonitor progress = SubMonitor.convert(monitor, 100);
 
     try {
-      getJobManager().beginRule(stager.getSchedulingRule(), progress.newChild(1));
+      getJobManager().beginRule(stager.getSchedulingRule(), progress.split(1));
       IPath safeWorkDirectory = workDirectory.append(SAFE_STAGING_WORK_DIRECTORY_NAME);
       return stager.stage(stagingDirectory, safeWorkDirectory,
-          stdoutOutputStream, stderrOutputStream, progress.newChild(99));
+          stdoutOutputStream, stderrOutputStream, progress.split(99));
     } catch (IllegalArgumentException ex) {
       return StatusUtil.error(this, Messages.getString("deploy.job.staging.failed"), ex);
     } finally {

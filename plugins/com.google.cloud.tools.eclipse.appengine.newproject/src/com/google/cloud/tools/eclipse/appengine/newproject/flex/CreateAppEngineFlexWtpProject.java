@@ -77,7 +77,7 @@ public class CreateAppEngineFlexWtpProject extends CreateAppEngineWtpProject {
         Messages.getString("add.appengine.flex.war.facet"), 100);
 
     AppEngineFlexWarFacet.installAppEngineFacet(
-        newProject, true /* installDependentFacets */, subMonitor.newChild(100));
+        newProject, true /* installDependentFacets */, subMonitor.split(100));
   }
 
   @Override
@@ -107,16 +107,16 @@ public class CreateAppEngineFlexWtpProject extends CreateAppEngineWtpProject {
     // Create a lib folder
     IFolder libFolder = newProject.getFolder("lib"); //$NON-NLS-1$
     if (!libFolder.exists()) {
-      libFolder.create(true, true, subMonitor.newChild(10));
+      libFolder.create(true, true, subMonitor.split(10));
     }
 
     // Download the dependencies from maven
     subMonitor.setWorkRemaining(SERVLET_DEPENDENCIES.size() + 10);
     for (MavenCoordinates dependency : SERVLET_DEPENDENCIES) {
-      installArtifact(dependency, libFolder, subMonitor.newChild(1));
+      installArtifact(dependency, libFolder, subMonitor.split(1));
     }
 
-    addDependenciesToClasspath(newProject, libFolder, subMonitor.newChild(10));
+    addDependenciesToClasspath(newProject, libFolder, subMonitor.split(10));
   }
 
   private static void addDependenciesToClasspath(IProject project, IFolder folder,

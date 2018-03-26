@@ -151,8 +151,8 @@ public class FlexMavenPackagedProjectStagingDelegate extends FlexStagingDelegate
 
     try {
       ILaunchConfiguration config = createMavenPackagingLaunchConfiguration(project);
-      ILaunch launch = config.launch("run", subMonitor.newChild(10));
-      if (!waitUntilLaunchTerminates(launch, subMonitor.newChild(90))) {
+      ILaunch launch = config.launch("run", subMonitor.split(10));
+      if (!waitUntilLaunchTerminates(launch, subMonitor.split(90))) {
         throw new OperationCanceledException();
       }
       return getFinalArtifactPath(project);

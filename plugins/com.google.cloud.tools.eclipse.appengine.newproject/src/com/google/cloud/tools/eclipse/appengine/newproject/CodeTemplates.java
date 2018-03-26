@@ -82,16 +82,16 @@ public class CodeTemplates {
     SubMonitor subMonitor = SubMonitor.convert(monitor, "Generating code", 45);
 
     IFile hello =
-        createJavaSourceFiles(project, config, isStandardProject, subMonitor.newChild(15));
+        createJavaSourceFiles(project, config, isStandardProject, subMonitor.split(15));
 
-    createAppEngineWebXmlOrAppYaml(project, config, isStandardProject, subMonitor.newChild(5));
+    createAppEngineWebXmlOrAppYaml(project, config, isStandardProject, subMonitor.split(5));
 
-    createWebXml(project, config, isStandardProject, subMonitor.newChild(5));
+    createWebXml(project, config, isStandardProject, subMonitor.split(5));
 
-    createWebContents(project, subMonitor.newChild(15));
+    createWebContents(project, subMonitor.split(15));
 
     if (config.getUseMaven()) {
-      createPomXml(project, config, isStandardProject, subMonitor.newChild(5));
+      createPomXml(project, config, isStandardProject, subMonitor.split(5));
     } else {
       subMonitor.worked(5);
     }
@@ -119,14 +119,14 @@ public class CodeTemplates {
 
     IFile hello = createChildFile("HelloAppEngine.java", //$NON-NLS-1$
         Templates.HELLO_APPENGINE_TEMPLATE,
-        mainPackageFolder, properties, subMonitor.newChild(5));
+        mainPackageFolder, properties, subMonitor.split(5));
 
     createChildFile("HelloAppEngineTest.java", //$NON-NLS-1$
         Templates.HELLO_APPENGINE_TEST_TEMPLATE, testPackageFolder,
-        properties, subMonitor.newChild(5));
+        properties, subMonitor.split(5));
     createChildFile("MockHttpServletResponse.java", //$NON-NLS-1$
         Templates.MOCK_HTTPSERVLETRESPONSE_TEMPLATE,
-        testPackageFolder, properties, subMonitor.newChild(5));
+        testPackageFolder, properties, subMonitor.split(5));
 
     return hello;
   }
@@ -187,9 +187,9 @@ public class CodeTemplates {
 
     IFolder webapp = project.getFolder("src/main/webapp"); //$NON-NLS-1$
     createChildFile("index.html", Templates.INDEX_HTML_TEMPLATE, webapp, //$NON-NLS-1$
-        Collections.<String, String>emptyMap(), subMonitor.newChild(5));
+        Collections.<String, String>emptyMap(), subMonitor.split(5));
 
-    copyChildFile("favicon.ico", webapp, subMonitor.newChild(5)); //$NON-NLS-1$
+    copyChildFile("favicon.ico", webapp, subMonitor.split(5)); //$NON-NLS-1$
   }
 
   private static void createPomXml(IProject project, AppEngineProjectConfig config,

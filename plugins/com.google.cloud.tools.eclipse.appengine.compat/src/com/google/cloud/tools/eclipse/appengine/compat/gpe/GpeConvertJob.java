@@ -37,8 +37,8 @@ public class GpeConvertJob extends AppEngineStandardProjectConvertJob {
     // Updating project before installing App Engine facet to avoid
     // https://github.com/GoogleCloudPlatform/google-cloud-eclipse/issues/1155.
     try {
-      GpeMigrator.removeObsoleteGpeRemnants(facetedProject, progress.newChild(20));
-      super.convert(status, progress.newChild(20));
+      GpeMigrator.removeObsoleteGpeRemnants(facetedProject, progress.split(20));
+      super.convert(status, progress.split(20));
     } catch (CoreException ex) {
       status.add(StatusUtil.error(this, "Unable to remove GPE remains", ex));
     }

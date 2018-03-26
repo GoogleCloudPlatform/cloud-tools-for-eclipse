@@ -58,7 +58,7 @@ public class LaunchHelper {
   public void launch(IModule[] modules, String launchMode) throws CoreException {
     SubMonitor progress = SubMonitor.convert(null);
     Collection<IServer> servers =
-        findExistingServers(modules, /* exact */ true, progress.newChild(3));
+        findExistingServers(modules, /* exact */ true, progress.split(3));
     IServer server = null;
     if (!servers.isEmpty()) {
       for (IServer existing : servers) {
@@ -74,9 +74,9 @@ public class LaunchHelper {
       }
     }
     if (server == null) {
-      server = createServer(modules, progress.newChild(3));
+      server = createServer(modules, progress.split(3));
     }
-    launch(server, launchMode, progress.newChild(4));
+    launch(server, launchMode, progress.split(4));
   }
 
   private static boolean isRunning(IServer server) {
@@ -126,9 +126,9 @@ public class LaunchHelper {
   private IServer createServer(IModule[] modules, SubMonitor progress) throws CoreException {
     IServerType serverType = ServerCore.findServerType(LocalAppEngineServerDelegate.SERVER_TYPE_ID);
     IServerWorkingCopy serverWorkingCopy =
-        serverType.createServer(null, null, progress.newChild(4));
-    serverWorkingCopy.modifyModules(modules, null, progress.newChild(4));
-    return serverWorkingCopy.save(false, progress.newChild(2));
+        serverType.createServer(null, null, progress.split(4));
+    serverWorkingCopy.modifyModules(modules, null, progress.split(4));
+    return serverWorkingCopy.save(false, progress.split(2));
   }
 
   @VisibleForTesting

@@ -148,7 +148,7 @@ public class StandardFacetInstallDelegate implements IDelegate {
 
     // Use the virtual component model decide where to create the appengine-web.xml
     appEngineWebXml = WebProjectUtil.createFileInWebInf(project, new Path(APPENGINE_WEB_XML),
-        new ByteArrayInputStream(new byte[0]), progress.newChild(2));
+        new ByteArrayInputStream(new byte[0]), progress.split(2));
     String configFileLocation = appEngineWebXml.getLocation().toString();
     Map<String, String> parameters = new HashMap<>();
     Object appEngineRuntime = facetVersion.getProperty("appengine.runtime");
@@ -158,6 +158,6 @@ public class StandardFacetInstallDelegate implements IDelegate {
     Templates.createFileContent(
         configFileLocation, Templates.APPENGINE_WEB_XML_TEMPLATE, parameters);
     progress.worked(4);
-    appEngineWebXml.refreshLocal(IFile.DEPTH_ZERO, progress.newChild(1));
+    appEngineWebXml.refreshLocal(IFile.DEPTH_ZERO, progress.split(1));
   }
 }

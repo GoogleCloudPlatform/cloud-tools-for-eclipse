@@ -93,7 +93,7 @@ public class CloudToolsEclipseProjectUpdater {
       progress.subTask(Messages.getString("removing.old.library.classpath.containers")); //$NON-NLS-1$
       javaProject.setRawClasspath(
           remainingEntries.toArray(new IClasspathEntry[remainingEntries.size()]),
-          progress.newChild(10));
+          progress.split(10));
 
       progress.subTask(Messages.getString("removing.old.library.container.definitions")); //$NON-NLS-1$
       for (String libraryId : libraryIds) {
@@ -124,7 +124,7 @@ public class CloudToolsEclipseProjectUpdater {
         }
       }
       progress.worked(5);
-      BuildPath.addNativeLibrary(javaProject, libraries, progress.newChild(30));
+      BuildPath.addNativeLibrary(javaProject, libraries, progress.split(30));
       return Status.OK_STATUS;
     } catch (CoreException ex) {
       return StatusUtil.error(CloudToolsEclipseProjectUpdater.class,

@@ -59,16 +59,16 @@ public class CloudToolsEclipseProjectNotifier implements IStartup {
       public IStatus runInWorkspace(IProgressMonitor monitor) throws CoreException {
         SubMonitor progress = SubMonitor.convert(monitor, 40);
         progress.subTask(Messages.getString("searching.for.projects")); //$NON-NLS-1$
-        Collection<IProject> projects = findCandidates(progress.newChild(10));
+        Collection<IProject> projects = findCandidates(progress.split(10));
         if (projects.isEmpty()) {
           return Status.OK_STATUS;
         }
-        projects = promptUser(projects, progress.newChild(5));
+        projects = promptUser(projects, progress.split(5));
         if (projects.isEmpty()) {
           return Status.OK_STATUS;
         }
         progress.subTask(Messages.getString("updating.projects")); //$NON-NLS-1$
-        return upgradeProjects(projects, progress.newChild(25));
+        return upgradeProjects(projects, progress.split(25));
       }
     };
     projectUpdater.setRule(workspace.getRoot());
@@ -138,7 +138,7 @@ public class CloudToolsEclipseProjectNotifier implements IStartup {
     MultiStatus status = StatusUtil.multi(this, Messages.getString("updating.projects.jobname")); //$NON-NLS-1$
     for (IProject project : projects) {
       progress.subTask(Messages.getString("updating.project", project.getName())); //$NON-NLS-1$
-      IStatus result = CloudToolsEclipseProjectUpdater.updateProject(project, progress.newChild(1));
+      IStatus result = CloudToolsEclipseProjectUpdater.updateProject(project, progress.split(1));
       status.merge(result);
     }
     // rewrite if OK as otherwise Progress View shows the "Updating projects for..." message

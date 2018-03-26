@@ -83,7 +83,7 @@ public class LibraryClasspathContainerResolverService
         if (classpathEntry.getPath().segment(0)
             .equals(LibraryClasspathContainer.CONTAINER_PATH_PREFIX)) {
           IStatus resolveContainerStatus =
-              resolveContainer(javaProject, classpathEntry.getPath(), subMonitor.newChild(1));
+              resolveContainer(javaProject, classpathEntry.getPath(), subMonitor.split(1));
           status.add(resolveContainerStatus);
         }
       }
@@ -136,16 +136,16 @@ public class LibraryClasspathContainerResolverService
           }
         }
         library =
-            BuildPath.collectLibraryFiles(javaProject, referencedLibraries, subMonitor.newChild(9));
+            BuildPath.collectLibraryFiles(javaProject, referencedLibraries, subMonitor.split(9));
       } else {
         library = CloudLibraries.getLibrary(libraryId);
       }
       if (library != null) {
         List<Job> sourceAttacherJobs = new ArrayList<>();
         LibraryClasspathContainer container = resolveLibraryFiles(javaProject, containerPath,
-            library, sourceAttacherJobs, subMonitor.newChild(9));
+            library, sourceAttacherJobs, subMonitor.split(9));
         JavaCore.setClasspathContainer(containerPath, new IJavaProject[] {javaProject},
-            new IClasspathContainer[] {container}, subMonitor.newChild(1));
+            new IClasspathContainer[] {container}, subMonitor.split(1));
         serializer.saveContainer(javaProject, container);
         for (Job job : sourceAttacherJobs) {
           job.schedule();
@@ -192,7 +192,7 @@ public class LibraryClasspathContainerResolverService
     List<LibraryFile> libraryFiles = library.getAllDependencies();
     SubMonitor subMonitor = SubMonitor.convert(monitor, libraryFiles.size());
     subMonitor.subTask(Messages.getString("TaskResolveArtifacts", getLibraryDescription(library)));
-    SubMonitor child = subMonitor.newChild(libraryFiles.size());
+    SubMonitor child = subMonitor.split(libraryFiles.size());
 
     List<IClasspathEntry> entries = new ArrayList<>();
     for (LibraryFile libraryFile : libraryFiles) {

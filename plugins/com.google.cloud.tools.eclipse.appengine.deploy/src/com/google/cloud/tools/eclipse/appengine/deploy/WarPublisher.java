@@ -61,8 +61,8 @@ public class WarPublisher {
     subMonitor.setTaskName(Messages.getString("task.name.publish.war"));
 
     IModuleResource[] resources =
-        flattenResources(project, safeWorkDirectory, subMonitor.newChild(10));
-    PublishUtil.publishFull(resources, destination, subMonitor.newChild(90));
+        flattenResources(project, safeWorkDirectory, subMonitor.split(10));
+    PublishUtil.publishFull(resources, destination, subMonitor.split(90));
   }
 
   public static void publishWar(IProject project, IPath destination, IPath safeWorkDirectory,
@@ -79,8 +79,8 @@ public class WarPublisher {
     subMonitor.setTaskName(Messages.getString("task.name.publish.war"));
 
     IModuleResource[] resources =
-        flattenResources(project, safeWorkDirectory, subMonitor.newChild(10));
-    PublishUtil.publishZip(resources, destination, subMonitor.newChild(90));
+        flattenResources(project, safeWorkDirectory, subMonitor.split(10));
+    PublishUtil.publishZip(resources, destination, subMonitor.split(90));
   }
 
   private static IModuleResource[] flattenResources(IProject project, IPath safeWorkDirectory,

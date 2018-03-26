@@ -128,34 +128,34 @@ public abstract class CreateAppEngineWtpProject extends WorkspaceModifyOperation
     SubMonitor subMonitor = SubMonitor.convert(monitor, operationLabel, 120);
     CreateProjectOperation operation = new CreateProjectOperation(description, operationLabel);
     try {
-      operation.execute(subMonitor.newChild(10), uiInfoAdapter);
-      mostImportant = createAndConfigureProjectContent(newProject, config, subMonitor.newChild(80));
+      operation.execute(subMonitor.split(10), uiInfoAdapter);
+      mostImportant = createAndConfigureProjectContent(newProject, config, subMonitor.split(80));
     } catch (ExecutionException ex) {
       throw new InvocationTargetException(ex);
     }
 
     IFacetedProject facetedProject = ProjectFacetsManager.create(
-        newProject, true /* convertIfNecessary */, subMonitor.newChild(5));
-    addAppEngineFacet(facetedProject, subMonitor.newChild(6));
+        newProject, true /* convertIfNecessary */, subMonitor.split(5));
+    addAppEngineFacet(facetedProject, subMonitor.split(6));
 
-    addAdditionalDependencies(newProject, config, subMonitor.newChild(20));
+    addAdditionalDependencies(newProject, config, subMonitor.split(20));
 
-    fixTestSourceDirectorySettings(newProject, subMonitor.newChild(5));
+    fixTestSourceDirectorySettings(newProject, subMonitor.split(5));
   }
 
   protected void addAdditionalDependencies(IProject newProject, AppEngineProjectConfig config,
       IProgressMonitor monitor) throws CoreException {
     SubMonitor progress = SubMonitor.convert(monitor, 12);
     if (config.getUseMaven()) {
-      enableMavenNature(newProject, progress.newChild(5));
-      BuildPath.addMavenLibraries(newProject, config.getAppEngineLibraries(), progress.newChild(7));
+      enableMavenNature(newProject, progress.split(5));
+      BuildPath.addMavenLibraries(newProject, config.getAppEngineLibraries(), progress.split(7));
     } else {
-      addJunit4ToClasspath(newProject, progress.newChild(2));
-      addJstl12ToClasspath(newProject, progress.newChild(2));
+      addJunit4ToClasspath(newProject, progress.split(2));
+      addJstl12ToClasspath(newProject, progress.split(2));
       IJavaProject javaProject = JavaCore.create(newProject);
       
       List<Library> libraries = config.getAppEngineLibraries();
-      BuildPath.addNativeLibrary(javaProject, libraries, progress.newChild(8));
+      BuildPath.addNativeLibrary(javaProject, libraries, progress.split(8));
     }
   }
 
@@ -197,21 +197,21 @@ public abstract class CreateAppEngineWtpProject extends WorkspaceModifyOperation
       IDependencyGraph.INSTANCE.preUpdate();
       try {
         Job.getJobManager().join(DependencyGraphImpl.GRAPH_UPDATE_JOB_FAMILY,
-            subMonitor.newChild(8));
+            subMonitor.split(8));
       } catch (OperationCanceledException | InterruptedException ex) {
         logger.log(Level.WARNING, "Exception waiting for WTP Graph Update job", ex);
       }
 
       ResolverConfiguration resolverConfiguration = new ResolverConfiguration();
       MavenPlugin.getProjectConfigurationManager().enableMavenNature(newProject,
-          resolverConfiguration, subMonitor.newChild(20));
+          resolverConfiguration, subMonitor.split(20));
     } finally {
       IDependencyGraph.INSTANCE.postUpdate();
     }
 
     // M2E will cleverly set "target/<artifact ID>-<version>/WEB-INF/classes" as a new Java output
     // folder; delete the default old folder.
-    newProject.getFolder("build").delete(true /* force */, subMonitor.newChild(2));
+    newProject.getFolder("build").delete(true /* force */, subMonitor.split(2));
   }
 
   private static void addJunit4ToClasspath(IProject newProject, IProgressMonitor monitor)
@@ -232,12 +232,12 @@ public abstract class CreateAppEngineWtpProject extends WorkspaceModifyOperation
 
     // locate WEB-INF/lib
     IFolder libFolder =
-        WebProjectUtil.createFolderInWebInf(newProject, new Path("lib"), subMonitor.newChild(5)); //$NON-NLS-1$
+        WebProjectUtil.createFolderInWebInf(newProject, new Path("lib"), subMonitor.split(5)); //$NON-NLS-1$
     MavenCoordinates jstl = new MavenCoordinates.Builder()
         .setGroupId("jstl") //$NON-NLS-1$
         .setArtifactId("jstl") //$NON-NLS-1$
         .setVersion("1.2").build(); //$NON-NLS-1$
-    installArtifact(jstl, libFolder, subMonitor.newChild(10));
+    installArtifact(jstl, libFolder, subMonitor.split(10));
   }
 
   /**
@@ -250,11 +250,11 @@ public abstract class CreateAppEngineWtpProject extends WorkspaceModifyOperation
     LibraryFile libraryFile = new LibraryFile(dependency);
     File artifactFile = null;
     try {
-      Artifact artifact = repositoryService.resolveArtifact(libraryFile, progress.newChild(5));
+      Artifact artifact = repositoryService.resolveArtifact(libraryFile, progress.split(5));
       artifactFile = artifact.getFile();
       IFile destinationFile = destination.getFile(artifactFile.getName());
       destinationFile.create(Files.newInputStream(artifactFile.toPath()), true,
-          progress.newChild(5));
+          progress.split(5));
       return destinationFile;
     } catch (CoreException ex) {
       logger.log(Level.WARNING, "Error downloading " + //$NON-NLS-1$

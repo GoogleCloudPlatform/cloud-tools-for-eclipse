@@ -95,7 +95,7 @@ public class AppEngineStandardJre7ProjectFacetDetector extends ProjectFacetDetec
         }
         progress.worked(1);
       }
-      AppEngineStandardFacet.installAllAppEngineRuntimes(workingCopy, progress.newChild(1));
+      AppEngineStandardFacet.installAllAppEngineRuntimes(workingCopy, progress.split(1));
     } catch (SAXException | IOException ex) {
       throw new CoreException(StatusUtil.error(this, "Unable to retrieve appengine-web.xml", ex));
     }

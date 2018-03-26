@@ -232,12 +232,12 @@ public class FacetUtil {
       IDependencyGraph.INSTANCE.preUpdate();
       try {
         Job.getJobManager().join(DependencyGraphImpl.GRAPH_UPDATE_JOB_FAMILY,
-            subMonitor.newChild(10));
+            subMonitor.split(10));
       } catch (OperationCanceledException | InterruptedException ex) {
         logger.log(Level.WARNING, "Exception waiting for WTP Graph Update job", ex);
       }
 
-      facetedProject.modify(facetInstallSet, subMonitor.newChild(90));
+      facetedProject.modify(facetInstallSet, subMonitor.split(90));
     } finally {
       IDependencyGraph.INSTANCE.postUpdate();
     }

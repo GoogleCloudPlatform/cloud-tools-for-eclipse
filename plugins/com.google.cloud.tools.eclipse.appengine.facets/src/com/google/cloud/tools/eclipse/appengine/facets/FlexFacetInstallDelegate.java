@@ -57,16 +57,16 @@ public class FlexFacetInstallDelegate implements IDelegate {
 
     IContainer appYamlParentFolder = appYaml.getParent();
     if (!appYamlParentFolder.exists()) {
-      ResourceUtils.createFolders(appYamlParentFolder, subMonitor.newChild(5));
+      ResourceUtils.createFolders(appYamlParentFolder, subMonitor.split(5));
     }
 
-    appYaml.create(new ByteArrayInputStream(new byte[0]), true, subMonitor.newChild(10));
+    appYaml.create(new ByteArrayInputStream(new byte[0]), true, subMonitor.split(10));
     String configFileLocation = appYaml.getLocation().toString();
     Templates.createFileContent(
         configFileLocation, Templates.APP_YAML_TEMPLATE,
         Collections.<String, String>emptyMap());
     subMonitor.worked(55);
 
-    appYaml.refreshLocal(IResource.DEPTH_ZERO, subMonitor.newChild(30));
+    appYaml.refreshLocal(IResource.DEPTH_ZERO, subMonitor.split(30));
   }
 }
