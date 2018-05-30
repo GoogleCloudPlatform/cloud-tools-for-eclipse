@@ -81,17 +81,17 @@
          unpack="false"/>
 
    <plugin
-         id="org.mortbay.jetty.server"
+         id="org.eclipse.jetty.server"
          download-size="0"
          install-size="0"
-         version="6.1.26"
+         version="0.0.0"
          unpack="false"/>
 
    <plugin
-         id="org.mortbay.jetty.util"
+         id="org.eclipse.jetty.util"
          download-size="0"
          install-size="0"
-         version="6.1.26"
+         version="0.0.0"
          unpack="false"/>
 
    <plugin

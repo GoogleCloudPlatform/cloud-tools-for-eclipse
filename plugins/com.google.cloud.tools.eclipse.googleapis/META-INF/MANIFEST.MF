@@ -68,6 +68,4 @@ Import-Package: com.fasterxml.jackson.core,
  org.eclipse.core.net.proxy,
  org.eclipse.core.runtime,
  org.eclipse.core.runtime.jobs,
- org.mortbay.jetty,
- org.mortbay.jetty.handler,
  org.osgi.service.component.annotations;version="1.2.0"
