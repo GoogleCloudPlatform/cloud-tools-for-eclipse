@@ -55,9 +55,10 @@
       <scope>provided</scope>
     </dependency>
     <dependency>
-      <groupId>javax.servlet.jsp</groupId>
-      <artifactId>javax.servlet.jsp-api</artifactId>
-      <version>2.3.1</version>
+      <groupId>org.eclipse.jetty</groupId>
+      <artifactId>apache-jsp</artifactId>
+      <version>9.3.18.v20170406</version>
+      <classifier>nolog</classifier>
       <scope>provided</scope>
     </dependency>
 </#if>

@@ -111,9 +111,9 @@
           export="false">
       <libraryFile pinned="true">
         <mavenCoordinates
-              groupId="javax.servlet.jsp"
-              artifactId="javax.servlet.jsp-api"
-              version="2.3.0" />
+              groupId="org.eclipse.jetty"
+              artifactId="apache-jsp"
+              version="9.3.18.v20170406" />
       </libraryFile>
     </library>
   </extension>
