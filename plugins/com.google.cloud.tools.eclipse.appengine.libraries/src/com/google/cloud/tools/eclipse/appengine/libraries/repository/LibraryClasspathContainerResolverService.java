@@ -37,6 +37,7 @@ import java.util.ArrayList;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.concurrent.Callable;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.apache.maven.artifact.Artifact;
 import org.eclipse.core.runtime.CoreException;
@@ -158,6 +159,7 @@ public class LibraryClasspathContainerResolverService
       } else {
         library = CloudLibraries.getLibrary(libraryId);
       }
+
       if (library != null) {
         List<Job> sourceAttacherJobs = new ArrayList<>();
         LibraryClasspathContainer container =
@@ -168,13 +170,20 @@ public class LibraryClasspathContainerResolverService
             new IJavaProject[] {javaProject},
             new IClasspathContainer[] {container},
             subMonitor.newChild(1));
-        serializer.saveContainer(javaProject, container);
-        for (Job job : sourceAttacherJobs) {
-          job.schedule();
+        if (!javaProject.getProject().getWorkspace().isTreeLocked()) {
+          // The classpath container update may have been triggered as part of a resource change
+          // in which case the workspace is locked and so we cannot serialize out our
+          // container cache.  There will be other opportunities.
+          // https://github.com/GoogleCloudPlatform/google-cloud-eclipse/issues/3181
+          serializer.saveContainer(javaProject, container);
+          for (Job job : sourceAttacherJobs) {
+            job.schedule();
+          }
         }
       }
       return Status.OK_STATUS;
     } catch (CoreException | IOException ex) {
+      logger.log(Level.SEVERE, "Could not resolve container: " + containerPath, ex);
       return StatusUtil.error(
           this, Messages.getString("TaskResolveContainerError", containerPath), ex);
     }
