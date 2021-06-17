@@ -373,17 +373,17 @@ public class PomTest {
     return (Element) children.item(0);
   }
 
-  private static Library newLibrary(String libraryId, LibraryFile... libraryFiles) {
+  static Library newLibrary(String libraryId, LibraryFile... libraryFiles) {
     Library library = new Library(libraryId);
     library.setLibraryFiles(Arrays.asList(libraryFiles));
     return library;
   }
 
-  private static MavenCoordinates coordinates(String groupId, String artifactId) {
+  static MavenCoordinates coordinates(String groupId, String artifactId) {
     return new MavenCoordinates.Builder().setGroupId(groupId).setArtifactId(artifactId).build();
   }
 
-  private static MavenCoordinates coordinates(String groupId, String artifactId, String version) {
+  static MavenCoordinates coordinates(String groupId, String artifactId, String version) {
     return new MavenCoordinates.Builder().setGroupId(groupId).setArtifactId(artifactId)
         .setVersion(version).build();
   }

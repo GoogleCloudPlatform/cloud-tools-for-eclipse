@@ -234,7 +234,7 @@ class Pom {
           dependency.appendChild(artifactIdElement);
 
           if (testComment == null) {
-            dependencies.appendChild(dependency);
+            addChild(dependencies, dependency);
           } else {
             dependencies.insertBefore(dependency, testComment);
           }
@@ -279,7 +279,7 @@ class Pom {
       }
     } else {
       if (versionNode != null) {
-        dependency.removeChild(versionNode);
+        removeChild(dependency, versionNode);
       }
     }
   }
@@ -305,8 +305,8 @@ class Pom {
             dependencyManagement = document.createElementNS("http://maven.apache.org/POM/4.0.0",
                 "dependencyManagement");
           }
-          dependencyManagement.appendChild(dependencies);
-          document.getDocumentElement().appendChild(dependencyManagement);
+          addChild(dependencyManagement, dependencies);
+          addChild(document.getDocumentElement(), dependencyManagement);
         }
 
         Element dependency =
@@ -321,7 +321,7 @@ class Pom {
         if (bom != null) {
           boms.add(bom);
         }
-        dependencies.appendChild(dependency);
+        addChild(dependencies, dependency);
       }
     } catch (XPathExpressionException ex) {
       IStatus status = StatusUtil.error(Pom.class, ex.getMessage(), ex);
@@ -444,7 +444,7 @@ class Pom {
     }
 
     for (Node node : nodesToRemove) {
-      dependencies.removeChild(node);
+      removeChild(dependencies, node);
     }
   }
 
@@ -482,10 +482,29 @@ class Pom {
   private void writeDocument() throws CoreException, TransformerException {
     Transformer transformer = transformerFactory.newTransformer();
     transformer.setOutputProperty(OutputKeys.INDENT, "yes");
+    transformer.setOutputProperty("{http://xml.apache.org/xslt}indent-amount","2"); //$NON-NLS-1$ //$NON-NLS-2$
     ByteArrayOutputStream out = new ByteArrayOutputStream();
     transformer.transform(new DOMSource(document), new StreamResult(out));
     InputStream in = new ByteArrayInputStream(out.toByteArray());
     
     pomFile.setContents(in, true, true, null);
+  }
+
+  private void addChild(Node parent, Node newChild) {
+    parent.appendChild(newChild);
+    removeWhiteSpaceBefore(newChild);// for child indentation
+  }
+
+  private static void removeChild(Node parent, Node oldChild) {
+    removeWhiteSpaceBefore(oldChild);
+    parent.removeChild(oldChild);
+  }
+
+  private static void removeWhiteSpaceBefore(Node node) {
+    Node prevElement = node.getPreviousSibling();
+    if (prevElement != null && prevElement.getNodeType() == Node.TEXT_NODE
+        && prevElement.getNodeValue().trim().length() == 0) {
+      node.getParentNode().removeChild(prevElement);
+    }
   }
 }
